@@ -1,0 +1,49 @@
+{
+    "releaseCommitMessageFormat": "chore(release): [skip ci] update to new version: {{currentTag}}",
+    "commitUrlFormat": "{{repository}}/commits/{{hash}}",
+    "preMajor": false,
+    "types": [
+        {
+            "type": "feat",
+            "section": "Features"
+        },
+        {
+            "type": "fix",
+            "section": "Bug Fixes"
+        },
+        {
+            "type": "chore",
+            "hidden": true
+        },
+        {
+            "type": "docs",
+            "hidden": true
+        },
+        {
+            "type": "style",
+            "hidden": true
+        },
+        {
+            "type": "refactor",
+            "hidden": true
+        },
+        {
+            "type": "perf",
+            "hidden": true
+        },
+        {
+            "type": "test",
+            "hidden": true
+        }
+    ],
+    "bumpFiles": [
+        {
+            "filename": "package.json",
+            "type": "json"
+        },
+        {
+            "filename": ".version",
+            "type": "plain-text"
+        }
+    ]
+}

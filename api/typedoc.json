@@ -1,0 +1,13 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": [
+    "./src/*.ts",
+    "./src/app/*.ts",
+    "./src/app/constants/*.ts",
+    "./src/app/controllers/**/*.ts",
+    "./src/app/services/**/*.ts",
+    "./src/app/types/**/*.ts",
+    "./src/app/utilities/*.ts"
+  ],
+  "out": "docs"
+}

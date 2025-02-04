@@ -1,24 +1,61 @@
-import { Request, Response } from 'express';
-import { STATUS_CODE } from '../../constants/status-codes';
-import { Controller, ControllerInstance, Get, Respond } from '../../utilities/controller';
+import 'reflect-metadata';
+import {Request, Response} from "express";
+import {BaseController, Controller, Get, Respond} from "../../utilities/controller";
+import {TimeSpan} from "../../types/utilities/time-span.class";
+import {MIDDLEWARE} from "../../application";
+import * as process from "node:process";
 
-@Controller("/test")
-export class IndexController extends ControllerInstance {
+export interface Uptime {
+    hours: number;
+    minutes: number;
+    seconds: number;
+    millis: number;
+}
 
-  constructor() {
-    super();
-  }
+export interface PingResponse {
+    version: string;
+    uptime: Uptime;
+}
 
-  @Get()
-  public index(request: Request, response: Response) {
-    Respond({
-      response,
-      status: STATUS_CODE.OK,
-      html: true,
-      data: `
-        <h1>Test</h1>
-        <p>This is a test.</p>
-      `,
-    });
-  }
+@Controller({
+    prefix: '/',
+    middlewares: [MIDDLEWARE.NO_AUTH]
+})
+export class IndexController extends BaseController {
+
+    constructor() {
+        super();
+    }
+
+    @Get()
+    public index(request: Request, response: Response) {
+        const uptime = TimeSpan.fromSeconds(process.uptime());
+        const pingResponse = {
+            version: process.env.npm_package_version ?? "1.0.0",
+            uptime: {
+                hours: uptime.hours,
+                minutes: uptime.minutes,
+                seconds: uptime.seconds,
+                millis: uptime.milliseconds
+            }
+        }
+        Respond({response, data: pingResponse});
+    }
+
+    @Get({
+        path: '/ping'
+    })
+    public ping(request: Request, response: Response) {
+        const uptime = TimeSpan.fromSeconds(process.uptime());
+        const pingResponse: PingResponse = {
+            version: process.env.npm_package_version ?? "3.0.0",
+            uptime: {
+                hours: uptime.hours,
+                minutes: uptime.minutes,
+                seconds: uptime.seconds,
+                millis: uptime.milliseconds
+            }
+        }
+        Respond({response, data: pingResponse});
+    }
 }

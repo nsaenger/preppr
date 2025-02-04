@@ -1,0 +1,22 @@
+services:
+    api:
+        image: preppr/api:latest
+        ports:
+            - "8000:80"
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        environment:
+            - TZ=${TZ}
+            - PORT=80
+            - MONGO_SERVER=${MONGO_HOST}
+            - MONGO_DB=${MONGO_DB}
+            - MONGO_AUTH=${MONGO_AUTH}
+            - MONGO_AUTH_USER=${MONGO_AUTH_USER}
+            - MONGO_AUTH_PASS=${MONGO_AUTH_PASS}
+            - MYSQL_HOST=${MYSQL_HOST}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASS=${MYSQL_PASS}
+            - MYSQL_DB=${MYSQL_DB}
+            - REDIS_SERVER=${REDIS_HOST}
+            - REDIS_PASS=${REDIS_PASS}
+        
