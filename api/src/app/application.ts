@@ -1,7 +1,7 @@
 import {Application as ExpressApplication, NextFunction, Request, Response} from 'express';
 import Express = require('express');
 import {STATUS_CODE} from './constants/status-codes';
-import {Controllers} from './controllers';
+import {Router} from './controllers';
 import {ApiException, ControllerInstance, Respond, RouteDefinition} from './utilities/controller';
 import {Injectable} from './utilities/injectable';
 import {Injector, Instance} from './utilities/injector';
@@ -14,6 +14,7 @@ import cors = require('cors');
 import {UserService} from "./services/user/user.service";
 import {MongoConnector} from "./utilities/mongoConnector";
 import {SettingsService} from "./services/settings/settings.service";
+import {ItemService} from "./services/item/item.service";
 
 
 /**
@@ -50,6 +51,8 @@ export class Application implements Instance {
         private authorizationService: AuthorizationService,
         private userService: UserService,
         private settingsService: SettingsService,
+        private itemService: ItemService,
+        private router: Router,
     ) {
     }
 
@@ -74,6 +77,7 @@ export class Application implements Instance {
         this.userService.init();
         this.authorizationService.init();
         this.settingsService.init();
+        this.itemService.init();
 
         Log.info('\t...serving documentation');
         this.express.use(Express.static('docs'))
@@ -189,8 +193,8 @@ export class Application implements Instance {
         // Build and serve swagger documentation (/api-docs)
         swagger(this.express);
 
-        Controllers.forEach((controllerType: typeof ControllerInstance) => {
-            const instance = Injector.resolve(controllerType);
+        this.router.routes.forEach((instance) => {
+            const controllerType = instance.constructor as ControllerInstance;
             const prefix = Reflect.getMetadata('prefix', controllerType);
             const routes: RouteDefinition[] = Reflect.getMetadata('routes', controllerType);
             const defaultMiddlewares: MIDDLEWARE[] = Reflect.getMetadata('defaultMiddleware', controllerType);

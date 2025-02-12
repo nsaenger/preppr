@@ -1,7 +1,14 @@
+import crypto from "node:crypto";
+import {DateTime} from "luxon";
 
 export const empty = (value: any) => {
     return value === "" || value === undefined || value === false || value === null;
 };
+
+export const HashPassword = (password: string, ts: DateTime): string => {
+    const salt = ts.toString();
+    return crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
+}
 
 /**
  * Filters an array to include only distinct elements, removing duplicates.

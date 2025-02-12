@@ -1,18 +1,17 @@
 import {Request, Response} from 'express';
 import {Observable} from 'rxjs';
 import {IStatusCode, STATUS_CODE} from '../constants/status-codes';
-import {Instance} from './injector';
+import {Injector, Instance} from './injector';
 import {MIDDLEWARE} from "../application";
-import moment from "moment";
 import stream from "stream";
-import {Log} from "./type";
+import {GenericClassDecorator, Log, Type} from "./type";
 import {SortFn} from "./dataUtils";
-import {Moment} from "moment/moment";
 import {hash} from "@konfirm/checksum";
-import {TimeSpan} from "../types/utilities/time-span.class";
+import {TimeSpan} from "./time-span.class";
 import _ from "lodash";
 import {DataService} from "./data.service";
-import {isPromise} from "rxjs/internal/util/isPromise";
+import {MongoEntity} from "@shared/types/mongo-entity";
+import {DateTime} from "luxon";
 
 /**
  * Represents a route definition for mapping HTTP requests in an application.
@@ -88,9 +87,7 @@ export const FlattenObject = (data: any): any => {
     Object.keys(data).forEach(key => {
         if (data[key] === undefined || data[key] === null) return
 
-        if (data[key] instanceof moment || data[key]._isAMomentObject === true) {
-            data[key] = moment(data[key]).toDate();
-        } else if (typeof data[key] === 'object') {
+        if (typeof data[key] === 'object') {
             data[key] = FlattenObject(data[key]);
         } else if (typeof data[key] === 'function') {
             delete data[key];
@@ -135,7 +132,7 @@ export const Respond = (responseObject: ResponseObject | Observable<ResponseObje
     const response: ResponseObject = {
         response: responseObject.response,
         status: responseObject.status ?? STATUS_CODE.OK,
-        data: FlattenObject(responseObject.data) ?? {},
+        data: responseObject.data ?? {},
         stream: responseObject.stream ?? null,
         type: responseObject.type ?? RESPONSE_TYPE.JSON,
         header: responseObject.header ?? null
@@ -247,19 +244,19 @@ export abstract class BaseController extends ControllerInstance {
      *  Tries to get parameter specified by key from requests route parameters. If the parameter is not found in the
      *  request, the default value will be returned.
      */
-    static getParam<T extends moment.Moment | string | number | boolean>(request: Request, key: string, defaultValue: T): T {
+    static getParam<T extends DateTime | string | number | boolean>(request: Request, key: string, defaultValue: T): T {
         const paramMap = request.params;
         if (paramMap[key] === undefined) {
             return defaultValue;
         }
 
-        if (defaultValue instanceof moment) {
-            const date = moment(paramMap[key], true);
+        if (defaultValue instanceof DateTime) {
+            const date = DateTime.fromISO(paramMap[key]);
 
-            if (date.isValid())
+            if (date.isValid)
                 return date as T;
 
-            throw new ApiException(`Invalid date format: ${paramMap[key]}. Suggested format: '${moment.defaultFormat}'`, STATUS_CODE.BAD_REQUEST);
+            throw new ApiException(`Invalid date format: ${paramMap[key]}. Suggested format: ISO8601`, STATUS_CODE.BAD_REQUEST);
         }
 
         return paramMap[key] as T;
@@ -294,7 +291,7 @@ export abstract class BaseController extends ControllerInstance {
      *   Tries to get parameters specified in paramDefinition from requests route parameters. If a parameter is not
      *   found in the request, the parameter is set to the default value specified in paramDefinition.
      */
-    static getParams<T extends Moment | string | number | boolean>(request: Request, paramDefinition: ParamDefinition<T>): ParamDefinition<T> {
+    static getParams<T extends DateTime | string | number | boolean>(request: Request, paramDefinition: ParamDefinition<T>): ParamDefinition<T> {
         const keys = Object.keys(paramDefinition);
 
         keys.forEach(key => {
@@ -319,7 +316,7 @@ export abstract class BaseController extends ControllerInstance {
  *
  * @template T The type of values in the parameter definition, constrained to moment.Moment, string, number, or boolean.
  */
-export type ParamDefinition<T extends moment.Moment | string | number | boolean> = { [key: string]: T };
+export type ParamDefinition<T extends DateTime | string | number | boolean> = { [key: string]: T };
 
 /**
  * Represents options for configuring a controller decorator.
@@ -345,9 +342,19 @@ export interface ControllerDecoratorOptions {
  * @param {Array<Function>} [options.middlewares] - Default middleware functions for the controller.
  * @return {ClassDecorator} Returns a class decorator that applies the controller configuration.
  */
-export function Controller(options?: ControllerDecoratorOptions): ClassDecorator {
+export function Controller<T extends Instance>(options?: ControllerDecoratorOptions): GenericClassDecorator<Type<T>> {
     options = options ?? {} as ControllerDecoratorOptions;
     return (target: any) => {
+        const tokens = Reflect.getMetadata('design:paramtypes', target) || [];
+        const injections = tokens.map((token: any) => Injector.resolve<any>(token));
+
+        const instance = new target(...injections);
+
+        Injector.instances.push({
+            type: target,
+            instance: instance,
+        });
+
         if (!options.prefix)
             options.prefix = '/' + target.name.replace('Controller', '').toLowerCase().trim();
 
@@ -552,7 +559,7 @@ export class Cache<T = any> {
     public id: string;
     public data: T;
     public checksum: string;
-    public validUntil: Moment;
+    public validUntil: DateTime;
     private readonly lifeTime: TimeSpan;
 
     /**
@@ -567,7 +574,7 @@ export class Cache<T = any> {
         this.id = cacheLike.id;
         this.data = cacheLike.data;
         this.lifeTime = cacheLike.lifeTime;
-        this.validUntil = this.lifeTime ? moment().add(this.lifeTime.totalMilliseconds, "ms") : moment();
+        this.validUntil = this.lifeTime ? DateTime.now().plus({milliseconds: this.lifeTime.totalMilliseconds}) : DateTime.now();
         this.checksum = hash(this.data);
     }
 
@@ -579,7 +586,7 @@ export class Cache<T = any> {
      */
     public updateData(data: T): Cache<T> {
         this.data = data;
-        this.validUntil = moment().add(this.lifeTime.totalMilliseconds, "ms");
+        this.validUntil = DateTime.now().plus({milliseconds: this.lifeTime.totalMilliseconds});
         this.checksum = hash(this.data);
 
         return this;
@@ -606,8 +613,7 @@ export class Cache<T = any> {
  *
  * @template TInterface - The interface that defines the structure of the data managed by this controller.
  */
-export abstract class DataController<TInterface, TService extends DataService<TInterface, any>> extends BaseController {
-
+export abstract class DataController<TInterface extends MongoEntity, TService extends DataService<TInterface, any>> extends BaseController {
     /**
      * An array of cache objects used to store data temporarily. Each cache object is expected
      * to hold an array of elements, with the specific type of the elements being flexible (any[]).
@@ -634,14 +640,17 @@ export abstract class DataController<TInterface, TService extends DataService<TI
      * and update the cache if necessary.
      *
      * @param {Request} request - The incoming request object containing path, parameters, body, and headers.
-     * @param {() => T[]} dataLoaderFn - A function to load data that will populate the cache.
+     * @param {T[]} data - A function to load data that will populate the cache.
      * @return {{ cache: Cache<T[]>, status: IStatusCode }} - An object containing the updated or existing cache,
      * and the operation status code.
      */
-    public async loadDataAndGenerateChecksum<T>(request: Request, dataLoaderFn: () => T[] | Promise<T[]>): Promise<{
+    public async loadDataAndGenerateChecksum<T>(request: Request, dataLoader: Promise<T[]>): Promise<{
         cache: Cache<T[]>,
         status: IStatusCode
     }> {
+        // Remove all outdated local caches
+        this.caches = this.caches.filter(x => x.validUntil > DateTime.now());
+
         // Generate cacheId and check if it already exists
         const cacheId = hash({path: request.path, params: request.params, body: request.body});
         const cacheIndex = this.caches.findIndex(x => x.id === cacheId);
@@ -651,34 +660,30 @@ export abstract class DataController<TInterface, TService extends DataService<TI
         if (!cache) {
             cache = new Cache<T[]>({
                 id: cacheId,
-                data: (isPromise(dataLoaderFn) ? await dataLoaderFn() : dataLoaderFn()) as T[],
+                data: await dataLoader,
                 lifeTime: this.defaultCacheLifetime
             });
+        } else {
+            // Check if local cache needs to be rebuild
+            if (cache.validUntil < DateTime.now())
+                cache.updateData(await dataLoader);
         }
 
-        // Caching is disabled, load data
+        // Caching is disabled, return data
         if (this.defaultCacheLifetime === null)
             return {cache: _.cloneDeep(cache), status: STATUS_CODE.OK};
 
         // Caching is enabled, update existing cache or add new one
-        if (cacheIndex >= 0)
+        if (cacheIndex !== -1)
             this.caches[cacheIndex] = cache;
         else
             this.caches.push(cache);
 
-        // Return cached data if checksums differ or cache is outdated
-        // Check if cache checksum is present in request and return cache is it is still valid
+        // Return null if checksums are identical (client has the same cache as the API)
         const requestedChecksum = request.header("X-Cache-Checksum");
-        if ((!!requestedChecksum && requestedChecksum === cache.checksum) &&
-            (cache.validUntil.isAfter(moment()) || this.defaultCacheLifetime === null))
-            return {cache: _.cloneDeep(cache), status: STATUS_CODE.NOT_MODIFIED};
-
-        // Cache is still valid, return cache
-        if (cache.validUntil.isAfter(moment()))
-            return {cache: _.cloneDeep(cache), status: STATUS_CODE.OK};
-
-        // Load new data into cache
-        cache.updateData(await dataLoaderFn());
+        if (!!requestedChecksum && requestedChecksum === cache.checksum) {
+            return {cache: null, status: STATUS_CODE.NOT_MODIFIED};
+        }
 
         return {cache: _.cloneDeep(cache), status: STATUS_CODE.OK};
     }
@@ -690,12 +695,15 @@ export abstract class DataController<TInterface, TService extends DataService<TI
      * @param {Response} response - The response object used to send back the processed data or error information.
      * @return {void} This method does not return anything directly, but responds to the client with the processed data or an error.
      */
+    @Get()
     public async getAll(request: Request, response: Response): Promise<void> {
         try {
-            const {cache, status} = await this.loadDataAndGenerateChecksum(request, async () =>
-                (await this.service.getAll())
+            const result = await this.loadDataAndGenerateChecksum(request, this.service.getAll()
+                .then(data => data
                     .filter(this.filter.bind(this))
-                    .map(this.sanitizeFromDB.bind(this)));
+                    .map(this.sanitizeFromDB.bind(this))
+                ));
+            const {cache, status} = result;
 
             if (status === STATUS_CODE.NOT_MODIFIED) {
                 Respond({response, status});
@@ -708,7 +716,7 @@ export abstract class DataController<TInterface, TService extends DataService<TI
                 data = data.sort(SortFn<TInterface>("id" as keyof TInterface));
             }
 
-            Respond({response, data: data, header: cache.getHeader()});
+            Respond({response, data: data, status: STATUS_CODE.OK, header: cache.getHeader()});
         } catch (e) {
             const exception = e as ApiException;
             Respond({response, status: exception.status, data: exception.message});
@@ -724,11 +732,14 @@ export abstract class DataController<TInterface, TService extends DataService<TI
      * @param {Response} response The HTTP response object, used to send back the result or error message.
      * @return {void} Does not return a value, as it sends the response directly to the client.
      */
-    public getById(request: Request, response: Response): void {
+    @Get({
+        path: "/:id"
+    })
+    public async getById(request: Request, response: Response): Promise<void> {
         try {
             let id = BaseController.getId(request);
 
-            const result = this.sanitizeFromDB(this.service.findOne("id = :0", [id]) as TInterface);
+            const result = this.sanitizeFromDB(await this.service.findOne("id = :0", [id]));
 
             if (!result)
                 throw new ApiException(`Can't find object with id: ${id}`, STATUS_CODE.NOT_FOUND);
@@ -748,11 +759,12 @@ export abstract class DataController<TInterface, TService extends DataService<TI
      * @param {Response} response - The HTTP response used to send the result back to the client.
      * @return {void} This method does not return a value, it sends a response to the client.
      */
+    @Post()
     public async create(request: Request, response: Response): Promise<void> {
         try {
             let data = this.sanitizeForDB(request.body as TInterface);
 
-            const result = this.sanitizeFromDB(await this.service.create(data, false) as TInterface);
+            const result = this.sanitizeFromDB(await this.service.create(data, false));
 
             // Force cache rebuild for all clients
             this.destroyCaches();
@@ -771,9 +783,10 @@ export abstract class DataController<TInterface, TService extends DataService<TI
      * @param {Response} response - The response object used to send the result or error to the client.
      * @return {void} This method does not return a value; it sends a response back to the client.
      */
+    @Put()
     public async update(request: Request, response: Response): Promise<void> {
         try {
-            let data = this.sanitizeForDB(request.body as TInterface);
+            let data = this.sanitizeForDB(request.body);
 
             const result = this.sanitizeFromDB(await this.service.update(data, false));
 
@@ -794,6 +807,9 @@ export abstract class DataController<TInterface, TService extends DataService<TI
      * @param {Response} response - The HTTP response object, used to send back the deletion result.
      * @return {void} No value is returned, the response object is used to communicate the result.
      */
+    @Delete({
+        path: "/:id"
+    })
     public async delete(request: Request, response: Response): Promise<void> {
         try {
             let id = BaseController.getId(request);

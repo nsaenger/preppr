@@ -1,4 +1,4 @@
-import moment, {Moment} from "moment";
+import {DateTime} from "luxon";
 
 const MILLIS_PER_SECOND = 1000;
 const MILLIS_PER_MINUTE = MILLIS_PER_SECOND * 60;   //     60,000
@@ -162,13 +162,13 @@ export class TimeSpan {
         }
     }
 
-    public static diff(a: Moment, b: Moment) {
-        a = moment(a).utc();
-        b = moment(b).utc();
-        return new TimeSpan(a.diff(b, 'milliseconds', true));
+    public static diff(a: DateTime, b: DateTime) {
+        a = a.toUTC();
+        b = b.toUTC();
+        return new TimeSpan(a.diff(b).milliseconds);
     }
 
-    public static fromMoment(date: Moment) {
+    public static fromMoment(date: DateTime) {
         return new TimeSpan(date.valueOf());
     }
 

@@ -1,0 +1,54 @@
+.root {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+}
+
+.content {
+  display: flex;
+  height: 100%;
+  flex-grow: 1;
+  justify-content: center;
+  overflow: hidden;
+  overflow-y: auto;
+  padding: 60px 40px;
+}
+
+.sidenav {
+  flex-grow: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  width: 300px;
+  position: relative;
+  transition: 0.3s ease-in-out;
+
+  &--closed {
+    width: 0;
+  }
+
+  &__content {
+    padding: 60px 20px;
+
+    &--closed {
+      overflow: hidden;
+      display: none;
+    }
+  }
+
+  &__toggle {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    top: 0;
+    right: -60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.2);
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+  }
+}

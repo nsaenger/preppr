@@ -1,5 +1,5 @@
-import {Moment} from "moment";
-import {MongoEntity} from "./mongoEntity";
+import {MongoEntity} from "./mongo-entity";
+import {DateTime} from "luxon";
 
 export interface UserSettings {
     dashboardConfig: any[];
@@ -7,7 +7,6 @@ export interface UserSettings {
 }
 
 export interface User extends MongoEntity {
-    isDeleted: boolean;
     name: string;
     email: string;
     salt?: string;
@@ -19,5 +18,5 @@ export interface User extends MongoEntity {
     activated: boolean;
     settings: UserSettings;
     passwordResetToken?: string;
-    passwordResetValidUntil?: Moment;
+    passwordResetValidUntil?: DateTime;
 }

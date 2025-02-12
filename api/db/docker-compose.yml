@@ -1,0 +1,25 @@
+volumes:
+    mongo-data:
+    redis-data:
+
+
+services:
+    mongo:
+        image: mongo
+        restart: always
+        ports:
+            - "27017:27017"
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: root
+        volumes:
+            - mongo-data:/data/db
+    redis:
+        image: bitnami/redis:latest
+        restart: always
+        ports:
+            - "6379:6379"
+        command: redis-server --save 20 1 --loglevel warning --requirepass password
+        volumes:
+            - redis-data:/data
+        

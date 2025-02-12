@@ -1,0 +1,25 @@
+<div class="root">
+  <div class="sidenav" [class.sidenav--closed]="!sidebarVisible">
+    <div class="sidenav__toggle"
+         (click)="sidebarVisible = !sidebarVisible">
+      <mat-icon>menu</mat-icon>
+    </div>
+    <div class="sidenav__content" [class.sidenav__content--closed]="!sidebarVisible">
+        <mat-nav-list>
+          <a mat-list-item (click)="setView('dashboard')">Dashboard</a>
+          <a mat-list-item (click)="setView('storage')">Storage</a>
+          <a mat-list-item (click)="setView('nutrients')">Nutrient Breakdown</a>
+          <a mat-list-item (click)="setView('emergency')">Emergency Mode</a>
+        </mat-nav-list>
+    </div>
+  </div>
+
+  <div class="content">
+    <ng-container [ngSwitch]="currentView">
+      <dashboard *ngSwitchCase="'dashboard'"></dashboard>
+      <storage *ngSwitchCase="'storage'"></storage>
+      <nutrients *ngSwitchCase="'nutrients'"></nutrients>
+      <emergency *ngSwitchCase="'emergency'"></emergency>
+    </ng-container>
+  </div>
+</div>

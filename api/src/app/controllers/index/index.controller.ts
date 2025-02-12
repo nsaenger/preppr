@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import {Request, Response} from "express";
 import {BaseController, Controller, Get, Respond} from "../../utilities/controller";
-import {TimeSpan} from "../../types/utilities/time-span.class";
+import {TimeSpan} from "../../utilities/time-span.class";
 import {MIDDLEWARE} from "../../application";
 import * as process from "node:process";
 

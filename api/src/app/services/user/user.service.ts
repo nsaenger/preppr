@@ -1,26 +1,27 @@
 import {Injectable} from "../../utilities/injectable";
 import {DataService} from "../../utilities/data.service";
-import {User} from "../../types/user.type";
+import {User} from "@shared/types/user.type";
 import {MongoConnector} from "../../utilities/mongoConnector";
 import {Log} from "../../utilities/type";
-import moment from "moment";
-import {AuthorizationService} from "../authorization/authorization.service";
+import {HashPassword} from "../../utilities/dataUtils";
+import {DateTime} from "luxon";
 
 @Injectable()
 export class UserService extends DataService<User, MongoConnector<User>> {
 
     constructor(
         connector: MongoConnector<User>,
-        private authorizationService: AuthorizationService,
-    ) { super("users", connector); }
+    ) {
+        super("users", connector);
+    }
 
     public init() {
         this.getAll().then((users) => {
             const admin = users.find(x => x.name === "admin");
             if (users.length === 0 || !admin) {
-                const now = moment();
+                const now = DateTime.now();
                 this.create({
-                    isDeleted: false,
+                    deleted: false,
                     name: "admin",
                     activated: true,
                     email: "admin@preppr",
@@ -31,9 +32,9 @@ export class UserService extends DataService<User, MongoConnector<User>> {
                         viewSettings: []
                     },
                     token: "",
-                    password: this.authorizationService.hashPassword("admin", now),
-                    created: now,
-                    modified: moment()
+                    password: HashPassword("admin", now),
+                    createdAt: now,
+                    updatedAt: DateTime.now()
                 }).then(() => {
                     Log.info("User table initialized, admin user created");
                 });

@@ -1,9 +1,9 @@
 import {Injectable} from "../../utilities/injectable";
 import {DataService} from "../../utilities/data.service";
 import {MongoConnector} from "../../utilities/mongoConnector";
-import {Settings} from "../../types/settings.type";
+import {Settings} from "@shared/types/settings.type";
 import {Log} from "../../utilities/type";
-import moment from "moment";
+import {DateTime, Duration} from "luxon";
 
 @Injectable()
 export class SettingsService extends DataService<Settings, MongoConnector<Settings>> {
@@ -18,21 +18,12 @@ export class SettingsService extends DataService<Settings, MongoConnector<Settin
         this.getAll().then((settings) => {
             if (settings.length === 0) {
                 this.create({
-                    active: true,
-                    created: moment(),
-                    currencySymbol: "€",
-                    inputVolumeSymbol: "FM",
-                    installationSettings: [],
-                    mailEnableSSL: false,
-                    mailPassword: "",
-                    mailPort: 0,
-                    mailServer: "",
-                    mailUser: "",
-                    modified: moment(),
+                    deleted: false,
+                    active: false,
+                    createdAt: DateTime.now(),
+                    updatedAt: DateTime.now(),
                     name: "default-settings",
-                    outputVolumeSymbol: "m³",
-                    staySignedInTtl: 14*24*60*60*1000
-
+                    staySignedInTtl: Duration.fromMillis(14 * 24 * 60 * 60 * 1000)
                 }).then(() => {
                     Log.info("Settings table initialized, default settings created");
                 });

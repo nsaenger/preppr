@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "es2022",
+    "lib": ["es2022"],
+    "outDir": "dist",
+    "baseUrl": "./",
+    "rootDir": "src",
+    "experimentalDecorators": true,
+    "declaration": true,
+    "declarationMap": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/__tests__/*",
+    "**/__e2e__/*"
+  ]
+}

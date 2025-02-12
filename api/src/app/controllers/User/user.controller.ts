@@ -1,21 +1,30 @@
-import {BaseController, Controller, DataController, Delete, Get, Post, Put, Respond,} from "../../utilities/controller";
+import {
+    BaseController,
+    Controller,
+    ControllerInstance,
+    DataController,
+    Delete,
+    Get,
+    Post,
+    Put,
+    Respond,
+} from "../../utilities/controller";
 import {Request, Response} from 'express';
 import {MIDDLEWARE} from "../../application";
 import {UserService} from "../../services/user/user.service";
-import {User, UserSettings} from "../../types/user.type";
+import {User} from "@shared/types/user.type";
 import {STATUS_CODE} from "../../constants/status-codes";
-import moment from "moment";
-import {AuthorizationService} from "../../services/authorization/authorization.service";
+import {HashPassword} from "../../utilities/dataUtils";
+import {DateTime} from "luxon";
 
 
 @Controller({
-    middlewares: [MIDDLEWARE.AUTH]
+    middlewares: [MIDDLEWARE.NO_AUTH]
 })
-export class UserController extends DataController<User, UserService> {
+export class UserController extends DataController<User, UserService> implements ControllerInstance {
 
     constructor(
         service: UserService,
-        private authorizationService: AuthorizationService,
     ) {
         super(service);
     }
@@ -37,11 +46,12 @@ export class UserController extends DataController<User, UserService> {
     @Post()
     public async create(request: Request, response: Response) {
         const protoUser: User = {...request.body};
-        const now = moment();
+        const now = DateTime.now();
         const newUser = await this.service.create({
             ...protoUser,
-            created: now,
-            password: this.authorizationService.hashPassword(protoUser.password, now),
+            createdAt: now,
+            updatedAt: now,
+            password: HashPassword(protoUser.password, now),
             settings: {
                 dashboardConfig: [],
                 viewSettings: []
@@ -65,7 +75,7 @@ export class UserController extends DataController<User, UserService> {
         }
 
         if (!request.body.password) {
-            const oldUser = await this.service.getById(user.id);
+            const oldUser = await this.service.getById(user._id);
             user.password = oldUser.password;
         }
 
@@ -82,7 +92,7 @@ export class UserController extends DataController<User, UserService> {
     }
 
     public filter(value: User): boolean {
-        return !value || !value.isDeleted;
+        return !value || !value.deleted;
     }
 
 }

@@ -1,6 +1,6 @@
 import {Instance} from "./injector";
 import {Connector} from "./connector";
-import {MongoEntity} from "../types/mongoEntity";
+import {MongoEntity} from "@shared/types/mongo-entity";
 
 
 /**

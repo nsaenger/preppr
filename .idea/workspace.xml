@@ -4,7 +4,67 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e00f9f1c-5c42-4f50-9081-bd9734672f34" name="Changes" comment="chore(setup): initial commit" />
+    <list default="true" id="e00f9f1c-5c42-4f50-9081-bd9734672f34" name="Changes" comment="feat: Delete unused MongoEntity interface and placeholder template&#10;&#10;The MongoEntity interface and the web app's placeholder HTML template were removed as they are no longer needed. This cleans up the codebase by eliminating redundant files and unused code.">
+      <change afterPath="$PROJECT_DIR$/api/db/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/app/controllers/Inventory/inventory.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/app/services/item/item.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shared/package-lock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shared/src/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shared/src/types/item.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shared/src/types/mongo-entity.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shared/tsconfig.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/components/root/root.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/components/root/root.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/components/root/root.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/components/root/root.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/services/inventory/inventory.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/services/inventory/inventory.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/views/dashboard/dashboard.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/views/dashboard/dashboard.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/views/dashboard/dashboard.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/views/dashboard/dashboard.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/views/emergency/emergency.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/views/emergency/emergency.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/views/emergency/emergency.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/views/emergency/emergency.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/views/nutrients/nutrients.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/views/nutrients/nutrients.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/views/nutrients/nutrients.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/views/nutrients/nutrients.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/views/storage/storage.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/views/storage/storage.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/views/storage/storage.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/src/app/views/storage/storage.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/app/application.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/app/application.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/app/controllers/User/user.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/app/controllers/User/user.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/app/controllers/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/app/controllers/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/app/controllers/index/index.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/app/controllers/index/index.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/app/services/authorization/authorization.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/app/services/authorization/authorization.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/app/services/settings/settings.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/app/services/settings/settings.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/app/services/user/user.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/app/services/user/user.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/app/types/mongoEntity.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/app/types/settings.type.ts" beforeDir="false" afterPath="$PROJECT_DIR$/shared/src/types/settings.type.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/app/types/user.type.ts" beforeDir="false" afterPath="$PROJECT_DIR$/shared/src/types/user.type.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/app/types/utilities/time-span.class.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/app/utilities/time-span.class.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/app/utilities/controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/app/utilities/controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/app/utilities/data.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/app/utilities/data.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/app/utilities/dataUtils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/app/utilities/dataUtils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/app/utilities/mongoConnector.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/app/utilities/mongoConnector.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/angular.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/src/app/app.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/src/app/app.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/shared/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/src/app/app.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/src/app/app.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/src/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/src/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/src/styles.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/tsconfig.json" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -15,16 +75,29 @@
       <option value="directory" />
     </option>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "nsaenger"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;nsaenger&quot;
   }
-}]]></component>
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:nsaenger/preppr.git&quot;,
+    &quot;accountId&quot;: &quot;7cfacbaf-10e4-4630-94d8-ca57c71b0441&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -33,7 +106,6 @@
     <OptionsSetting value="false" id="Update" />
   </component>
   <component name="ProjectViewState">
-    <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
@@ -41,25 +113,62 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Nico/IdeaProjects/preppr/webapp",
+    "last_opened_file_path": "C:/Users/Nico/IdeaProjects/preppr/api/src/app/services",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "node",
     "nodejs_package_manager_path": "npm",
+    "npm.Serve.executor": "Run",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
-    "ts.external.directory.path": "C:\\Users\\Nico\\IdeaProjects\\preppr\\webapp\\node_modules\\typescript\\lib",
+    "settings.editor.selected.configurable": "editor.preferences.smartKeys",
+    "ts.external.directory.path": "C:\\Users\\Nico\\IdeaProjects\\preppr\\api\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Nico\IdeaProjects\preppr\webapp" />
-      <recent name="C:\Users\Nico\IdeaProjects\preppr" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Nico\IdeaProjects\preppr\api\src\app\services" />
+      <recent name="C:\Users\Nico\IdeaProjects\preppr\api\src\app\controllers" />
+      <recent name="C:\Users\Nico\IdeaProjects\preppr\api" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Nico\IdeaProjects\preppr\api\src\app\utilities" />
+      <recent name="C:\Users\Nico\IdeaProjects\preppr\shared\src\types" />
+      <recent name="C:\Users\Nico\IdeaProjects\preppr\api\db" />
+      <recent name="C:\Users\Nico\IdeaProjects\preppr\shared\src" />
+      <recent name="C:\Users\Nico\IdeaProjects\preppr\api" />
+    </key>
+  </component>
+  <component name="RunManager" selected="npm.Serve">
+    <configuration name="Angular Application (shared)" type="JavascriptDebugType" uri="http://localhost:4200">
+      <method v="2" />
+    </configuration>
+    <configuration name="Angular CLI Server (shared)" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/api/shared/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="Serve" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/webapp/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -79,6 +188,11 @@
       <updated>1738678923672</updated>
       <workItem from="1738678924881" duration="387000" />
       <workItem from="1738679330158" duration="1687000" />
+      <workItem from="1739354641001" duration="1603000" />
+      <workItem from="1739356283523" duration="6184000" />
+      <workItem from="1739363927310" duration="1735000" />
+      <workItem from="1739366013147" duration="595000" />
+      <workItem from="1739367243845" duration="12329000" />
     </task>
     <servers />
   </component>
@@ -103,8 +217,13 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/api" />
+    </ignored-roots>
     <MESSAGE value="Initial commit" />
     <MESSAGE value="chore(setup): initial commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="chore(setup): initial commit" />
+    <MESSAGE value="chore(ide): project setup" />
+    <MESSAGE value="feat: Delete unused MongoEntity interface and placeholder template&#10;&#10;The MongoEntity interface and the web app's placeholder HTML template were removed as they are no longer needed. This cleans up the codebase by eliminating redundant files and unused code." />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: Delete unused MongoEntity interface and placeholder template&#10;&#10;The MongoEntity interface and the web app's placeholder HTML template were removed as they are no longer needed. This cleans up the codebase by eliminating redundant files and unused code." />
   </component>
 </project>
